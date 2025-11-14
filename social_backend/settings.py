@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-key')
 DEBUG = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,.onrender.com').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -149,7 +149,9 @@ CHANNEL_LAYERS = {
     },
 }
 
+# Production settings
 import dj_database_url
+import os
 
 # Parse database URL from environment
 if 'DATABASE_URL' in os.environ:
@@ -161,21 +163,22 @@ if 'DATABASE_URL' in os.environ:
 
 # Production security settings
 if not DEBUG:
-    # Allowed hosts
-    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '.onrender.com').split(',')
+    # Allowed hosts - UPDATED
+    allowed_hosts = os.environ.get('ALLOWED_HOSTS', '.onrender.com,social-media-api-awmo.onrender.com')
+    ALLOWED_HOSTS = [host.strip() for host in allowed_hosts.split(',')]
 
     # Security
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False  # Changed to False for now
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
 
     # CORS for production
     cors_origins = os.environ.get('CORS_ALLOWED_ORIGINS', '')
     if cors_origins:
         CORS_ALLOWED_ORIGINS = cors_origins.split(',')
+else:
+    # Development ALLOWED_HOSTS
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
