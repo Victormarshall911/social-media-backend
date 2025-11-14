@@ -167,6 +167,15 @@ if not DEBUG:
     allowed_hosts = os.environ.get('ALLOWED_HOSTS', '.onrender.com,social-media-api-awmo.onrender.com')
     ALLOWED_HOSTS = [host.strip() for host in allowed_hosts.split(',')]
 
+    csrf_origins = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+    if csrf_origins:
+        CSRF_TRUSTED_ORIGINS = csrf_origins.split(',')
+    else:
+        CSRF_TRUSTED_ORIGINS = [
+            'https://social-media-api-awmo.onrender.com',
+            'https://*.onrender.com',
+        ]
+
     # Security
     SECURE_SSL_REDIRECT = False  # Changed to False for now
     SESSION_COOKIE_SECURE = True
