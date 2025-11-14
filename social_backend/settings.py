@@ -11,6 +11,12 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-key')
 DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,.onrender.com').split(',')
 
+# CSRF Trusted Origins
+CSRF_TRUSTED_ORIGINS = [
+    'https://social-media-api-awmo.onrender.com',
+    'https://*.onrender.com',
+]
+
 # Application definition
 INSTALLED_APPS = [
     'daphne',  # Must be first for channels
