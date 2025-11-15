@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Post, Like, Comment, CommentLike
-from accounts.serializers import UserMinimalSerializer  # Changed from relative import
+from accounts.serializers import UserMinimalSerializer
+
 
 class PostSerializer(serializers.ModelSerializer):
     """Serializer for Post model"""
@@ -39,6 +40,16 @@ class LikeSerializer(serializers.ModelSerializer):
         model = Like
         fields = ['id', 'user', 'post', 'created_at']
         read_only_fields = ['id', 'user', 'created_at']
+
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+    """Serializer for creating comments - only requires text"""
+    class Meta:
+        model = Comment
+        fields = ['text', 'parent']
+        extra_kwargs = {
+            'parent': {'required': False, 'allow_null': True}
+        }
 
 
 class CommentSerializer(serializers.ModelSerializer):
