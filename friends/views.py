@@ -2,7 +2,8 @@ from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
-from django.db.models import Q  # Add this import
+from django.db import models
+from django.db.models import Q
 from .models import Friendship, Follow
 from .serializers import FriendshipSerializer, FollowSerializer, FriendRequestSerializer
 
@@ -163,11 +164,17 @@ class FollowUserView(APIView):
         if not created:
             # Unfollow
             follow.delete()
+            # Update counts
+            User.objects.filter(id=request.user.id).update(following_count=models.F('following_count') - 1)
+            User.objects.filter(id=user_to_follow.id).update(followers_count=models.F('followers_count') - 1)
             return Response(
                 {'message': 'Unfollowed', 'following': False},
                 status=status.HTTP_200_OK
             )
         else:
+            # Follow - update counts
+            User.objects.filter(id=request.user.id).update(following_count=models.F('following_count') + 1)
+            User.objects.filter(id=user_to_follow.id).update(followers_count=models.F('followers_count') + 1)
             return Response(
                 {'message': 'Following', 'following': True},
                 status=status.HTTP_201_CREATED

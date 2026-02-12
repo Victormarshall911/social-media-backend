@@ -108,6 +108,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Cloudinary storage for production (Render's filesystem is ephemeral)
+CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
+if CLOUDINARY_URL:
+    INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+    CLOUDINARY_STORAGE = {
+        'CLOUDINARY_URL': CLOUDINARY_URL,
+    }
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

@@ -2,6 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import User
 
+admin.site.site_header = 'NexTalk Administration'
+admin.site.site_title = 'NexTalk Admin'
+admin.site.index_title = 'NexTalk Dashboard'
+
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):

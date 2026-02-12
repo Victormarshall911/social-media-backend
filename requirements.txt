@@ -17,3 +17,5 @@ twisted==24.11.0
 cryptography==44.0.0
 pyOpenSSL==24.3.0
 service-identity==24.2.0
+django-cloudinary-storage==0.3.0
+cloudinary==1.40.0

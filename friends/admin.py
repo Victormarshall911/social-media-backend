@@ -27,8 +27,4 @@ class FriendshipAdmin(admin.ModelAdmin):
 
 
 @admin.register(Follow)
-class FollowAdmin(admin.ModelAdmin):
-    list_display = ['id', 'follower', 'following', 'created_at']
-    list_filter = ['created_at']
-    search_fields = ['follower__username', 'following__username']
-    ordering = ['-created_at']
+class FollowAdmin(admin.ModelAdmin):    list_filter = ['created_at']
